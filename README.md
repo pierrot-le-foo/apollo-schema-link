@@ -1,122 +1,105 @@
 Apollo link to use a in-memory graphql server.
 
-# Get started
+# Install
 
 ```bash
 npm i pierrot-le-foo/apollo-schema-link
 ```
+
+# Get started
+
+## Simple example
 
 ```javascript
 // Our dependencies
 import SchemaLink from "apollo-schema-link";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
 import { buildSchema, print } from "graphql";
-```
 
-```javascript
-// The query cache
-const cache = new InMemoryCache();
-```
-
-```javascript
-// Let's imagine a very simple state:
 const schema = gql`
-```
+  type User {
+    id: ID!
+    email: String!
+  }
 
-```graphql
   type Query {
-    """
-    If true, user is logged in
-    """
-    isLoggedIn: Boolean!
+    getUsers: [User!]!
   }
-
-  type Mutation {
-    """
-    Log user in
-    """
-    login: Boolean
-
-    """
-    Log user out
-    """
-    logout: Boolean
-  }
-```
-
-```javascript
 `;
-```
 
-```javascript
-// The GraphQL client operations
 const operations = {
-  isLoggedIn: gql`
+  getUsers: gql`
     query {
-      isLoggedIn
-    }
-  `,
-
-  login: gql`
-    mutation {
-      login
-    }
-  `,
-
-  logout: gql`
-    mutation {
-      logout
+      getUsers
     }
   `,
 };
-```
 
-```javascript
-// Our resolvers
 const resolvers = {
-  isLoggedIn() {
-    return (
-      cache.readQuery({
-        query: operations.isLoggedIn,
-      }) || false
-    );
-  },
-
-  login() {
-    cache.writeQuery({
-      query: operations.isLoggedIn,
-      data: { isLoggedIn: true },
-    });
-  },
-
-  logout() {
-    cache.writeQuery({
-      query: operations.isLoggedIn,
-      data: { isLoggedIn: false },
-    });
+  async getUsers() {
+    const response = await fetch("/api/users");
+    return await response.json();
   },
 };
 ```
 
-```javascript
-// Create a new Apollo client
-const client = new ApolloClient({
-  link: new SchemaLink({
-    schema: buildSchema(print(schema)),
-    rootValue: resolvers,
-  }),
-  cache,
-});
-```
+## Simple example with React
 
 ```javascript
-// Fire your queries
+// Our dependencies
+import SchemaLink from "apollo-schema-link";
+import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
+import { buildSchema, print } from "graphql";
 
-await client.query({ query: isLoggedIn }); // false
+const schema = gql`
+  type User {
+    id: ID!
+    email: String!
+  }
 
-await client.mutate({ mutation: login });
-await client.query({ query: isLoggedIn }); // true
+  type Query {
+    getUsers: [User!]!
+  }
+`;
 
-await client.mutate({ mutation: logout });
-await client.query({ query: isLoggedIn }); // false
+const operations = {
+  getUsers: gql`
+    query {
+      getUsers
+    }
+  `,
+};
+
+const resolvers = {
+  async getUsers() {
+    const response = await fetch("/api/users");
+    return await response.json();
+  },
+};
+
+function Users() {
+  const {
+    data: { getUsers: users = [] } = {},
+    error,
+    loading,
+  } = useQuery(operations.getUsers);
+
+  if (error) {
+    return <h4>Error {error.message}</h4>;
+  }
+
+  if (loading) {
+    return <div>Loading</div>;
+  }
+
+  return (
+    <table>
+      {users.map((user) => (
+        <tr key={user.id}>
+          <td>{user.email}</td>
+        </tr>
+      ))}
+    </table>
+  );
+}
 ```
