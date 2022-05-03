@@ -47,35 +47,7 @@ const resolvers = {
 
 ```javascript
 // Our dependencies
-import SchemaLink from "apollo-schema-link";
-import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
-import { buildSchema, print } from "graphql";
-
-const schema = gql`
-  type User {
-    id: ID!
-    email: String!
-  }
-
-  type Query {
-    getUsers: [User!]!
-  }
-`;
-
-const operations = {
-  getUsers: gql`
-    query {
-      getUsers
-    }
-  `,
-};
-
-const resolvers = {
-  async getUsers() {
-    const response = await fetch("/api/users");
-    return await response.json();
-  },
-};
+import { useQuery } from "@apollo/client/react";
 
 function Users() {
   const {
