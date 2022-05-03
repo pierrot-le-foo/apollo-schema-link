@@ -14,9 +14,9 @@ npm i pierrot-le-foo/apollo-schema-link
 // Our dependencies
 import SchemaLink from "apollo-schema-link";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
-import { buildSchema, print } from "graphql";
+import { buildSchema } from "graphql";
 
-const schema = gql`
+const schema = buildSchema(`
   type User {
     id: ID!
     email: String!
@@ -25,7 +25,7 @@ const schema = gql`
   type Query {
     getUsers: [User!]!
   }
-`;
+`);
 
 const operations = {
   getUsers: gql`
@@ -35,12 +35,22 @@ const operations = {
   `,
 };
 
-const resolvers = {
+const rootValue = {
   async getUsers() {
     const response = await fetch("/api/users");
     return await response.json();
   },
 };
+
+const apolloClient = new ApolloClient({
+  link: new SchemaLink({
+    schema,
+    rootValue,
+  }),
+  cache: new InMemoryCache(),
+});
+
+await apolloClient.query({ query: operations.getUsers });
 ```
 
 ## Simple example with React
