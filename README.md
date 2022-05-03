@@ -27,14 +27,6 @@ const schema = buildSchema(`
   }
 `);
 
-const operations = {
-  getUsers: gql`
-    query {
-      getUsers
-    }
-  `,
-};
-
 const rootValue = {
   async getUsers() {
     const response = await fetch("/api/users");
@@ -50,7 +42,13 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-await apolloClient.query({ query: operations.getUsers });
+await apolloClient.query({
+  query: gql`
+    query {
+      getUsers
+    }
+  `,
+});
 ```
 
 ## Simple example with React
