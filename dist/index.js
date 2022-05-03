@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SchemaLink = void 0;
+// @ts-ignore Peer dependency
 const client_1 = require("@apollo/client");
 const graphql_1 = require("graphql");
 function invariant(condition, errorMessage) {
@@ -107,4 +107,4 @@ class SchemaLink extends client_1.ApolloLink {
         }));
     }
 }
-exports.SchemaLink = SchemaLink;
+exports.default = SchemaLink;

@@ -18,7 +18,7 @@ export declare namespace SchemaLink {
         typeResolver?: Record<string, any>;
     }
 }
-export declare class SchemaLink extends ApolloLink {
+export default class SchemaLink extends ApolloLink {
     schema: GraphQLSchema;
     rootValue: any;
     context: SchemaLink.ResolverContextFunction | any;
