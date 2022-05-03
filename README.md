@@ -13,52 +13,70 @@ import { buildSchema, print } from "graphql";
 
 const cache = new InMemoryCache();
 
+// Let'say imagine a very simple state with only a flag
+// The flag is true or false and can be changed
 const schema = gql`
   type Query {
+    """
+    If true, user is logged in
+    """
     isLoggedIn: Boolean!
   }
 
   type Mutation {
+    """
+    Log user in
+    """
     login: Boolean
+
+    """
+    Log user out
+    """
     logout: Boolean
   }
 `;
 
-const isLoggedIn = gql`
-  query isLoggedIn {
-    isLoggedIn
-  }
-`;
+// The GraphQL client operations
+const operations = {
+  isLoggedIn: gql`
+    query {
+      isLoggedIn
+    }
+  `,
 
-const login = gql`
-  mutation login {
-    login
-  }
-`;
+  login: gql`
+    mutation {
+      login
+    }
+  `,
 
-const logout = gql`
-  mutation logout {
-    logout
-  }
-`;
+  logout: gql`
+    mutation {
+      logout
+    }
+  `,
+};
 
+// Our resolvers
 const resolvers = {
   isLoggedIn() {
-    return cache.readQuery({
-      query: isLoggedIn,
-    }) || false;
+    return (
+      cache.readQuery({
+        query: operations.isLoggedIn,
+      }) || false
+    );
   },
 
   login() {
     cache.writeQuery({
-      query: isLoggedIn,
+      query: operations.isLoggedIn,
       data: { isLoggedIn: true },
     });
   },
 
   logout() {
     cache.writeQuery({
-      query: isLoggedIn,
+      query: operations.isLoggedIn,
       data: { isLoggedIn: false },
     });
   },
