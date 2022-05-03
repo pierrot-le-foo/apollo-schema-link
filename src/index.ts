@@ -102,7 +102,7 @@ export declare namespace SchemaLink {
   }
 }
 
-export class SchemaLink extends ApolloLink {
+export default class SchemaLink extends ApolloLink {
   public schema: GraphQLSchema;
   public rootValue: any;
   public context: SchemaLink.ResolverContextFunction | any;
