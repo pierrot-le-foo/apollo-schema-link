@@ -17,6 +17,9 @@ import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
 import { buildSchema } from "graphql";
 
 const schema = buildSchema(`
+```
+
+```graphql
   type User {
     id: ID!
     email: String!
@@ -25,15 +28,22 @@ const schema = buildSchema(`
   type Query {
     getUsers: [User!]!
   }
-`);
+```
 
+```javascript
+`);
+```
+
+```javascript
 const rootValue = {
   async getUsers() {
     const response = await fetch("/api/users");
     return await response.json();
   },
 };
+```
 
+```javascript
 const apolloClient = new ApolloClient({
   link: new SchemaLink({
     schema,
@@ -41,7 +51,9 @@ const apolloClient = new ApolloClient({
   }),
   cache: new InMemoryCache(),
 });
+```
 
+```javascript
 await apolloClient.query({
   query: gql`
     query {
