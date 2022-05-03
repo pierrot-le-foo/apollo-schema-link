@@ -7,15 +7,23 @@ npm i pierrot-le-foo/apollo-schema-link
 ```
 
 ```javascript
+// Our dependencies
 import SchemaLink from "apollo-schema-link";
 import { gql, ApolloClient, InMemoryCache } from "@apollo/client";
 import { buildSchema, print } from "graphql";
+```
 
+```javascript
+// The query cache
 const cache = new InMemoryCache();
+```
 
-// Let'say imagine a very simple state with only a flag
-// The flag is true or false and can be changed
+```javascript
+// Let's imagine a very simple state:
 const schema = gql`
+```
+
+```graphql
   type Query {
     """
     If true, user is logged in
@@ -34,8 +42,13 @@ const schema = gql`
     """
     logout: Boolean
   }
-`;
+```
 
+```javascript
+`;
+```
+
+```javascript
 // The GraphQL client operations
 const operations = {
   isLoggedIn: gql`
@@ -56,7 +69,9 @@ const operations = {
     }
   `,
 };
+```
 
+```javascript
 // Our resolvers
 const resolvers = {
   isLoggedIn() {
@@ -81,7 +96,10 @@ const resolvers = {
     });
   },
 };
+```
 
+```javascript
+// Create a new Apollo client
 const client = new ApolloClient({
   link: new SchemaLink({
     schema: buildSchema(print(schema)),
@@ -89,6 +107,10 @@ const client = new ApolloClient({
   }),
   cache,
 });
+```
+
+```javascript
+// Fire your queries
 
 await client.query({ query: isLoggedIn }); // false
 
