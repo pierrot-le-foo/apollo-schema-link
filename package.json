@@ -1,0 +1,14 @@
+{
+  "name": "apollo-schema-link",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "@apollo/client": "^3.6.1",
+    "graphql": "^16.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
