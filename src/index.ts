@@ -1,4 +1,3 @@
-// @ts-ignore Peer dependency
 import { ApolloLink, FetchResult, Observable, Operation } from "@apollo/client";
 
 import {
@@ -8,8 +7,11 @@ import {
   subscribe,
   FragmentDefinitionNode,
   OperationDefinitionNode,
-  // @ts-ignore Peer dependency
+  GraphQLTypeResolver,
+  GraphQLFieldResolver,
 } from "graphql";
+
+type Maybe<T> = null | undefined | T;
 
 function invariant(condition: boolean, errorMessage: string) {
   if (!condition) {
@@ -106,7 +108,7 @@ export default class SchemaLink extends ApolloLink {
   public schema: GraphQLSchema;
   public rootValue: any;
   public context: SchemaLink.ResolverContextFunction | any;
-  public typeResolver: Record<string, any>;
+  public typeResolver: Maybe<GraphQLTypeResolver<any, any>>;
 
   constructor({
     schema,

@@ -1,6 +1,6 @@
 {
   "name": "apollo-schema-link",
-  "version": "1.0.3",
+  "version": "1.0.9",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
@@ -8,9 +8,11 @@
   },
   "peerDependencies": {
     "@apollo/client": "^3.6.1",
-    "graphql": "^16.4.0"
+    "graphql": "16.4.0"
   },
   "devDependencies": {
     "typescript": "^4.6.4"
+  },
+  "dependencies": {
   }
 }
