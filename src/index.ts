@@ -8,7 +8,6 @@ import {
   FragmentDefinitionNode,
   OperationDefinitionNode,
   GraphQLTypeResolver,
-  GraphQLFieldResolver,
 } from "graphql";
 
 type Maybe<T> = null | undefined | T;
@@ -101,6 +100,10 @@ export declare namespace SchemaLink {
     context?: ResolverContextFunction | Record<string, any>;
 
     typeResolver?: Record<string, any>;
+
+    options?: {
+      isSync?: boolean
+    }
   }
 }
 
@@ -109,18 +112,22 @@ export default class SchemaLink extends ApolloLink {
   public rootValue: any;
   public context: SchemaLink.ResolverContextFunction | any;
   public typeResolver: Maybe<GraphQLTypeResolver<any, any>>;
+  public isSync = false;
 
   constructor({
     schema,
     rootValue,
     context,
     typeResolver,
+    options = {},
   }: SchemaLink.Options) {
     super();
     this.schema = schema;
     this.rootValue = rootValue;
     this.context = context;
     this.typeResolver = typeResolver as Record<string, any>;
+    const { isSync = false } = options;
+    this.isSync = isSync;
   }
 
   public request(operation: Operation): Observable<FetchResult> | null {
